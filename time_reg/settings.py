@@ -36,6 +36,7 @@ PROJECT_APPS = (
 
 THIRD_PARTY_APPS = (
     'django_extensions',
+    'pipeline',
 )
 
 DJANGO_APPS = (
@@ -45,6 +46,8 @@ DJANGO_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+
 )
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + PROJECT_APPS
@@ -57,6 +60,8 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.gzip.GZipMiddleware',
+    'pipeline.middleware.MinifyHTMLMiddleware',
 )
 
 TEMPLATE_DIRS = (
@@ -66,6 +71,13 @@ TEMPLATE_DIRS = (
 ROOT_URLCONF = 'time_reg.urls'
 
 WSGI_APPLICATION = 'time_reg.wsgi.application'
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ]
+}
 
 
 # Database
@@ -91,12 +103,47 @@ USE_L10N = True
 
 USE_TZ = True
 
-
-STATIC_URL = '/static/'
-
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'static'),
-)
-
 LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = '/login/'
+
+
+# Static files
+
+STATIC_URL = '/static/'
+STATIC_ROOT = 'static/'
+
+STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'pipeline.finders.PipelineFinder',
+)
+
+PIPELINE_CSS = {
+    'style': {
+        'source_filenames': (
+          'bootstrap/css/*.css',
+          'date-picker/css/datepicker3.css',
+          'scripts/bower_components/angular/angular-csp.css',
+          'bootstrap-editable.css',
+          'timereg/css/time_reg.css',
+          'xeditable/css/xeditable.css',
+        ),
+        'output_filename': 'style.css'
+    },
+}
+
+PIPELINE_JS = {
+    'scripts': {
+        'source_filenames': (
+          'scripts/bower_components/angular/angular.js',
+          'django_extensions/js/*.js',
+          'scripts/*.js',
+          'date-picker/js/bootstrap-datepicker.js',
+          'main.js',
+          'moment.min.js',
+          'xeditable/js/xeditable.js',
+        ),
+        'output_filename': 'scripts.js',
+    }
+}

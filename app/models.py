@@ -5,8 +5,8 @@ from django.db import models
 class TimeRegistration(models.Model):
 
     SOURCE_CHOICES = [
-        (0, "Manual"),
-        (1, "Auto"),
+        ('M', "Manual"),
+        ('A', "Auto"),
     ]
 
     user = models.ForeignKey(User, related_name='time_registrations')

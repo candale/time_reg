@@ -2,4 +2,104 @@
 
 {% block content %}
 
+{% include "_header.html" %}
+
+<div class="container" ng-app="TimeReg" ng-controller="RegistrationCtrl">
+    <div class="row">
+        <form class="form-inline">
+          <div class="form-group">
+            <label for="task_code">Task Code</label>
+            <input type="text" ng-model="taskCode" class="form-control" 
+                   id="task_code" placeholder="task">
+          </div>
+
+          <div class="form-group">
+            <label for="project">Project</label>
+            <input type="text" ng-model="project" class="form-control" 
+                   id="project" placeholder="awesomeness">
+          </div>
+
+          <div class="form-group">
+            <label for="time_spent">Time Spent</label>
+            <div class="input-group">
+              <input type="text" ng-model="timeSpent" class="form-control" 
+                     id="time_spent" placeholder="e.g 2,5" 
+                     aria-describedby="sizing-addon3">
+              <span class="input-group-addon" id="sizing-addon3">hours</span>
+            </div>
+          </div>
+
+          <div class="form-group" id="sandbox-container">
+            <label for="date">Date</label>
+            <input type="text" type="text" class="form-control" ng-model="date">
+          </div>
+          <button type="submit" ng-click="register()" 
+                  class="btn btn-primary">OK</button>
+        </form> 
+    </div>
+
+    <br><br><br><br>
+    <div class="row">
+        <table class="table table-striped table-hover table-condensed" id="editable_table">
+          <thead>
+            <tr>
+                <th>Task</th><th>Project</th><th>Time Spent</th><th>Date</th>
+                <th>Actions</th>
+            </tr>
+          </thead>
+
+            <tbody ng-cloak>
+              <tr ng-repeat="reg in registrations">
+                <td>
+                  <span editable-text="reg.task_code" e-name="task_code"
+                        e-form="rowform" e-required>
+                    [[ reg.task_code ]]
+                  </span>
+                </td>
+
+                <td>
+                   <span editable-text="reg.project" e-name="project"
+                        e-form="rowform"  e-required>
+                  [[ reg.project ]]
+                </td>
+
+                <td>
+                   <span editable-text="reg.time" e-name="time"
+                        e-form="rowform"  e-required>
+                  [[ toClientDelta(reg.time) ]]
+                </td>
+
+                <td>
+                   <span editable-text="reg.registration_day" e-name="registration_day"
+                        e-form="rowform"  e-required>
+                  [[ reg.registration_day ]]
+                </td>
+
+                <td style="white-space: nowrap">
+                  <form editable-form name="rowform" onbeforesave="updateRegistration($data, reg.id)" 
+                        ng-show="rowform.$visible" 
+                        class="form-buttons form-inline" 
+                        shown="inserted == reg">
+                    <button type="submit" ng-disabled="rowform.$waiting" 
+                            class="btn btn-primary">
+                      save
+                    </button>
+                    <button type="button" ng-disabled="rowform.$waiting" 
+                            ng-click="rowform.$cancel()" 
+                            class="btn btn-default">
+                      cancel
+                    </button>
+                  </form>
+
+                  <div class="buttons" ng-show="!rowform.$visible">
+                    <button class="btn btn-primary" ng-click="rowform.$show()">edit</button>
+                    <button class="btn btn-danger" ng-click="alert('lool')">del</button>
+                  </div>  
+                </td>
+              </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
 {% endblock %}
