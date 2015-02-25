@@ -23,3 +23,36 @@ class TimeRegistration(models.Model):
 
     def __str__(self):
         return "User: {} Task: {}".format(self.user.username, self.task_code)
+
+    def get_time_str(self):
+        hours = self.time / 60
+        minutes = round((self.time / 60.0) - hours, 1)
+
+        if not minutes:
+            total_time = str(hours)
+        else:
+            total_time = str(hours + minutes)
+
+        return total_time
+
+    def _get_normalized_time_from_string(self, time_str):
+        '''
+        str_time must be the stirng representation of a float value
+        it may be trailed by a 'h' (e.g. 3.5h)
+        '''
+        striped_value = time_str.strip()
+        if striped_value.find('h') >= 0:
+            if striped_value.find('h') != len(striped_value) - 1:
+                raise ValueError('Invalid time string')
+            striped_value = striped_value[:len(striped_value) - 1]
+
+        float_value = float(striped_value)
+
+        if float_value <= 0:
+            raise ValueError('Time cannot be zero or negative')
+
+        return float_value
+
+    def set_time_from_str(self, str_time):
+        normalized_time = self._get_normalized_time_from_string(str_time)
+        self.time = int(normalized_time * 60)

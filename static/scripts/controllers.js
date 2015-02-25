@@ -1,6 +1,8 @@
 angular.module('TimeReg.controllers', [])
   .controller('RegistrationCtrl', function($scope, timeRegService) {
+
     $scope.date = moment().format('MM/DD/YYYY');
+
     timeRegService.getRegistrations().success(
       function(response) {
         $scope.registrations = response;
@@ -13,7 +15,7 @@ angular.module('TimeReg.controllers', [])
         "registration_day": $scope.date,
         "task_code": $scope.taskCode,
         "project": $scope.project,
-        "time": $scope.toServerDelta($scope.timeSpent),
+        "time_str": $scope.timeSpent,
         "source": "M"
       };
       console.log(message);
@@ -23,31 +25,36 @@ angular.module('TimeReg.controllers', [])
       });
     };
 
-    $scope.toClientDelta = function(delta) {
-      delta_str = parseInt(delta);
-      var hours = Math.floor(delta / 60);
-      var minutes = (delta / 60) - hours;
-
-      return hours.toString() + "." + (minutes.toFixed(1) * 10).toString() + "h";
-    };
-
-    $scope.toServerDelta = function(delta) {
-      delta_float = parseFloat(delta);
-      return delta_float * 60;
-    };
-
     $scope.updateRegistration = function(data, regId) {
       data.id = regId;
-      if(data.time.indexOf('h') > -1) {
-        data.time = $scope.toServerDelta(
-          data.time.substring(0, data.time.length - 1));
-      } else {
-        data.time = $scope.toServerDelta(data.time);
-        $scope.time = $scope.time + "h";
-      }
       data.source = "M";
 
-      timeRegService.updateRegistration(regId, data);
+      timeRegService.updateRegistration(regId, data).success(function(response) {
+        for(var timeReg in $scope.registrations) {
+
+          if($scope.registrations[timeReg].id == response.id) {
+            $scope.registrations[timeReg] = response;
+          }
+        }
+      }).error(function(response) {
+        var a = 1;
+      });
     };
+
+    $scope.checkEmptyText = function(data) {
+      if(!data) {
+        return "Cannot be empty";
+      }
+    };
+
+    $scope.validateTime = function(data) {
+      if(!data || isNaN(data)) {
+        return "Invalid time";
+      }
+    }
+
+    $scope.delete = function(data) {
+
+    }
 
 });

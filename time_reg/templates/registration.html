@@ -52,26 +52,32 @@
               <tr ng-repeat="reg in registrations">
                 <td>
                   <span editable-text="reg.task_code" e-name="task_code"
-                        e-form="rowform" e-required>
+                        e-form="rowform" onbeforesave="checkEmptyText($data)"
+                        e-required>
                     [[ reg.task_code ]]
                   </span>
                 </td>
 
                 <td>
                    <span editable-text="reg.project" e-name="project"
-                        e-form="rowform"  e-required>
+                        e-form="rowform" onbeforesave="checkEmptyText($data)"
+                        e-required>
                   [[ reg.project ]]
                 </td>
 
                 <td>
-                   <span editable-text="reg.time" e-name="time"
-                        e-form="rowform"  e-required>
-                  [[ toClientDelta(reg.time) ]]
+                   <span id="time" editable-text="reg.time_str" e-name="time_str"
+                        e-form="rowform"  e-required
+                        onbeforesave="validateTime($data)">
+                  [[ reg.time_str ]]h
                 </td>
 
                 <td>
-                   <span editable-text="reg.registration_day" e-name="registration_day"
-                        e-form="rowform"  e-required>
+                   <span 
+                        editable-bsdate="reg.registration_day" 
+                        e-datepicker-popup="mm/dd/yyyy"
+                        e-form="rowform" onbeforesave="checkEmptyText($data)"
+                        e-required e-id="sandbox-container">
                   [[ reg.registration_day ]]
                 </td>
 
@@ -93,7 +99,7 @@
 
                   <div class="buttons" ng-show="!rowform.$visible">
                     <button class="btn btn-primary" ng-click="rowform.$show()">edit</button>
-                    <button class="btn btn-danger" ng-click="alert('lool')">del</button>
+                    <button class="btn btn-danger" ng-click="delete($data)">del</button>
                   </div>  
                 </td>
               </tr>
