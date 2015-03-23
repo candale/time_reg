@@ -7,31 +7,42 @@
 <div class="container" ng-app="TimeReg" ng-controller="RegistrationCtrl">
     <div class="row">
         <form class="form-inline">
-          <div class="form-group">
+          <div class="form-group" ng-class="errors.task_code ? 'has-error' : ''">
             <label for="task_code">Task Code</label>
             <input type="text" ng-model="taskCode" class="form-control" 
-                   id="task_code" placeholder="task">
+                   id="task_code" placeholder="task"
+                   ng-required="true">
           </div>
 
-          <div class="form-group">
+          <div class="form-group" ng-class="errors.project ? 'has-error' : ''">
             <label for="project">Project</label>
             <input type="text" ng-model="project" class="form-control" 
-                   id="project" placeholder="awesomeness">
+                   id="project" placeholder="awesomeness"
+                   ng-required="true">
           </div>
 
           <div class="form-group">
             <label for="time_spent">Time Spent</label>
-            <div class="input-group">
+            <div class="input-group" ng-class="errors.time_str ? 'has-error' : ''">
               <input type="text" ng-model="timeSpent" class="form-control" 
                      id="time_spent" placeholder="e.g 2,5" 
-                     aria-describedby="sizing-addon3">
+                     aria-describedby="sizing-addon3"
+                     ng-required="true">
               <span class="input-group-addon" id="sizing-addon3">hours</span>
             </div>
           </div>
 
-          <div class="form-group" id="sandbox-container">
+          <div class="form-group" >
             <label for="date">Date</label>
-            <input type="text" type="text" class="form-control" ng-model="date">
+            <div class="input-group" ng-class="errors.registration_day ? 'has-error' : ''">
+              <input type="text" class="form-control" datepicker-popup="[[datePicker.format]]" 
+                     ng-model="datePicker.dt" is-open="datePicker.opened"
+                     ng-required="true"
+                     ng-click="datePicker.open($event)"
+                     show-button-bar="false"
+                     data-toggle="tooltip"
+                     data-original-title='lol, tooltip' />
+            </div>
           </div>
           <button type="submit" ng-click="register()" 
                   class="btn btn-primary">OK</button>
@@ -53,32 +64,42 @@
                 <td>
                   <span editable-text="reg.task_code" e-name="task_code"
                         e-form="rowform" onbeforesave="checkEmptyText($data)"
-                        e-required>
-                    [[ reg.task_code ]]
-                  </span>
+                        e-required />
+                    <span ng-show="!rowform.$visible">
+                      [[ reg.task_code ]]
+
+                    </span>
                 </td>
 
                 <td>
                    <span editable-text="reg.project" e-name="project"
                         e-form="rowform" onbeforesave="checkEmptyText($data)"
-                        e-required>
-                  [[ reg.project ]]
+                        e-required />
+                    <span ng-show="!rowform.$visible">
+                      [[ reg.project ]]
+                    </span>
                 </td>
 
                 <td>
                    <span id="time" editable-text="reg.time_str" e-name="time_str"
                         e-form="rowform"  e-required
-                        onbeforesave="validateTime($data)">
-                  [[ reg.time_str ]]h
+                        onbeforesave="validateTime($data)" />
+                  <span ng-show="!rowform.$visible">
+                    [[ reg.time_str ]]h
+                  </span>
                 </td>
 
                 <td>
-                   <span 
-                        editable-bsdate="reg.registration_day" 
-                        e-datepicker-popup="mm/dd/yyyy"
-                        e-form="rowform" onbeforesave="checkEmptyText($data)"
-                        e-required e-id="sandbox-container">
-                  [[ reg.registration_day ]]
+                   <span
+                        editable-bsdate="reg.registration_day"
+                        e-form="rowform"
+                        e-datepicker-popup-x-editable="[[datePicker.format]]"
+                        e-is-open="reg.datepicker_open"
+                        e-ng-click="openDatepickerForRecord(reg.id)"
+                        e-show-button-bar="false" />
+                    <span ng-show="!rowform.$visible">
+                      [[ reg.registration_day ]]
+                    </span>
                 </td>
 
                 <td style="white-space: nowrap">

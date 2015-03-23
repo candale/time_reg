@@ -122,8 +122,8 @@ STATICFILES_FINDERS = (
 PIPELINE_CSS = {
     'style': {
         'source_filenames': (
-          'bootstrap/css/*.css',
-          'date-picker/css/datepicker3.css',
+          'bootstrap/css/bootstrap-theme.css',
+          'bootstrap/css/bootstrap.css',
           'scripts/bower_components/angular/angular-csp.css',
           'bootstrap-editable.css',
           'timereg/css/time_reg.css',
@@ -136,13 +136,14 @@ PIPELINE_CSS = {
 PIPELINE_JS = {
     'scripts': {
         'source_filenames': (
-          'scripts/bower_components/angular/angular.js',
-          'django_extensions/js/*.js',
           'scripts/*.js',
-          'date-picker/js/bootstrap-datepicker.js',
-          'main.js',
+          'bootstrap/js/bootstrap.js',
+          'bower_components/angular/angular.js',
+          'django_extensions/js/*.js',
           'moment.min.js',
-          'xeditable/js/xeditable.js',
+          'bower_components/angular-xeditable/dist/js/xeditable.js',
+          'bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js',
+          'main.js',
         ),
         'output_filename': 'scripts.js',
     }

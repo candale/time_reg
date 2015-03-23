@@ -1,7 +1,8 @@
 angular.module('TimeReg', [
   'TimeReg.controllers',
   'TimeReg.services',
-  'xeditable'
+  'xeditable',
+  'ui.bootstrap'
 ]).config(function($interpolateProvider, $httpProvider){
     $interpolateProvider.startSymbol('[[').endSymbol(']]');
 

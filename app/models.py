@@ -35,9 +35,10 @@ class TimeRegistration(models.Model):
 
         return total_time
 
-    def _get_normalized_time_from_string(self, time_str):
+    @classmethod
+    def get_normalized_time_from_string(cls, time_str):
         '''
-        str_time must be the stirng representation of a float value
+        time_str must be the string representation of a float value
         it may be trailed by a 'h' (e.g. 3.5h)
         '''
         striped_value = time_str.strip()
@@ -53,6 +54,7 @@ class TimeRegistration(models.Model):
 
         return float_value
 
-    def set_time_from_str(self, str_time):
-        normalized_time = self._get_normalized_time_from_string(str_time)
-        self.time = int(normalized_time * 60)
+    @classmethod
+    def get_time_from_str(cls, str_time):
+        normalized_time = cls.get_normalized_time_from_string(str_time)
+        return int(normalized_time * 60)

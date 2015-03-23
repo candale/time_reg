@@ -5,8 +5,9 @@ from app.models import TimeRegistration
 
 class TimeRegistrationSerializer(serializers.ModelSerializer):
 
-    registration_day = serializers.DateField(format="%d/%m/%Y",
-                                             input_formats=["%d/%m/%Y"])
+    registration_day = serializers.DateField(format="%m/%d/%Y",
+                                             input_formats=["%m/%d/%Y",
+                                                            "%d/%m/%Y"])
     source = serializers.ChoiceField(choices=TimeRegistration.SOURCE_CHOICES)
     time_str = serializers.CharField(source="get_time_str")
 
@@ -36,9 +37,13 @@ class TimeRegistrationSerializer(serializers.ModelSerializer):
         return value
 
     def save(self, *args, **kwargs):
-        self.instance.set_time_from_str(self.validated_data['get_time_str'])
-        time_str = self.instance.get_time_str()
+        time = TimeRegistration.get_time_from_str(
+            self.validated_data['get_time_str'])
+        del self.validated_data['get_time_str']
+
+        self.validated_data['time'] = time
         # this is weird behaviour, the method get_time_str is replaces with
         # the validated data for time_str
         super(TimeRegistrationSerializer, self).save(*args, **kwargs)
+        time_str = self.instance.get_time_str()
         self.data['time_str'] = time_str

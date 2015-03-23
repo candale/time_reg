@@ -46,6 +46,7 @@ class TimeRegistrationView(APIView):
         return Response(serializer.data)
 
     def post(self, request):
+        import pudb; pu.db
         serializer = TimeRegistrationSerializer(data=request.data)
         if serializer.is_valid():
             serializer.validated_data['user_id'] = request.user.id
