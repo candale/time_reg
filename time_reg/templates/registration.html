@@ -59,7 +59,7 @@
 
     <br><br><br><br>
     <div class="row">
-        <table class="table table-striped table-hover table-condensed" id="editable_table">
+        <table class="table table-striped table-hover table-condensed center-table" id="editable_table">
           <thead>
             <tr>
                 <th>Task</th><th>Project</th><th>Time Spent</th><th>Date</th>
@@ -69,7 +69,7 @@
 
             <tbody ng-cloak>
               <tr ng-repeat="reg in registrations">
-                <td>
+                <td class="vert-align">
                   <span editable-text="reg.task_code" e-name="task_code"
                         e-form="rowform" onbeforesave="checkEmptyText($data)"
                         e-required />
@@ -79,7 +79,7 @@
                     </span>
                 </td>
 
-                <td>
+                <td class="vert-align">
                    <span editable-text="reg.project" e-name="project"
                         e-form="rowform" onbeforesave="checkEmptyText($data)"
                         e-required />
@@ -88,7 +88,7 @@
                     </span>
                 </td>
 
-                <td>
+                <td class="vert-align">
                    <span id="time" editable-text="reg.time_str" e-name="time_str"
                         e-form="rowform"  e-required
                         onbeforesave="validateTime($data)" />
@@ -97,7 +97,7 @@
                   </span>
                 </td>
 
-                <td>
+                <td class="vert-align">
                    <span
                         editable-bsdate="reg.registration_day"
                         e-form="rowform"
@@ -111,10 +111,10 @@
                     </span>
                 </td>
 
-                <td style="white-space: nowrap">
+                <td style="white-space: nowrap" width="15%" class="vert-align">
                   <form editable-form name="rowform" onbeforesave="updateRegistration($data, reg.id)" 
                         ng-show="rowform.$visible" 
-                        class="form-buttons form-inline" 
+                        class="form-buttons form-inline vert-align" 
                         shown="inserted == reg">
                     <button type="submit" ng-disabled="rowform.$waiting" 
                             class="btn btn-primary">

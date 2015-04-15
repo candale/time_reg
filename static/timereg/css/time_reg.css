@@ -23,6 +23,14 @@
   color: #005E0D;
 }
 
+.table tbody>tr>td.vert-align{
+    vertical-align: middle;
+}
+
+.table tbody>tr>td>form {
+    margin-bottom: 0em;
+}
+
 .vdivide [class*='col-']:not(:last-child):after {
   background: #e0e0e0;
   width: 1px;
