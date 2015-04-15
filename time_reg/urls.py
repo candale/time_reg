@@ -2,7 +2,7 @@ from django.conf.urls import include, url, patterns
 from django.contrib import admin
 
 from app.views import login_or_redirect, TimeRegistrationView
-
+import app
 
 api_patterns = (
 )
@@ -15,7 +15,8 @@ urlpatterns = patterns(
     url(r'^', include('app.urls')),
 
     # API views
-    url(r'^api/time_registrations/(?P<id>\d+)/$',
+    url(r'^api/time_registrations/(?P<id>\d+).json$',
         TimeRegistrationView.as_view()),
-    url(r'^api/time_registrations/', TimeRegistrationView.as_view()),
+    url(r'^api/time_registrations.json', TimeRegistrationView.as_view()),
+    url(r'^api/statistics/', include(app.urls))
 )

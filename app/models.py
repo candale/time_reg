@@ -7,6 +7,7 @@ class TimeRegistration(models.Model):
     SOURCE_CHOICES = [
         ('M', "Manual"),
         ('A', "Auto"),
+        ('J', "Jira"),
     ]
 
     user = models.ForeignKey(User, related_name='time_registrations')
@@ -14,6 +15,7 @@ class TimeRegistration(models.Model):
     project = models.CharField(max_length=50, null=False, blank=False)
     task_code = models.CharField(max_length=50, null=False, blank=False)
     registration_day = models.DateField(null=False, blank=False)
+    # time in minutes
     time = models.BigIntegerField(null=False, blank=False)
     source = models.CharField(max_length=50, choices=SOURCE_CHOICES,
                               null=False, blank=False)

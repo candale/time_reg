@@ -10,3 +10,27 @@
 .edit-in-place.active input {
     display: inline-block;
 }
+
+.header-stats {
+  font-weight: bold;
+}
+
+.red-offset {
+  color: #6B0005;
+}
+
+.green-offset {
+  color: #005E0D;
+}
+
+.vdivide [class*='col-']:not(:last-child):after {
+  background: #e0e0e0;
+  width: 1px;
+  content: "";
+  display:block;
+  position: absolute;
+  top:0;
+  bottom: 0;
+  right: 0;
+  min-height: 10px;
+}

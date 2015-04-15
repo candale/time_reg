@@ -75,7 +75,7 @@ WSGI_APPLICATION = 'time_reg.wsgi.application'
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+        'rest_framework.permissions.IsAuthenticated'
     ]
 }
 
@@ -128,6 +128,7 @@ PIPELINE_CSS = {
           'bootstrap-editable.css',
           'timereg/css/time_reg.css',
           'xeditable/css/xeditable.css',
+          'bower_components/angularjs-toaster/toaster.css',
         ),
         'output_filename': 'style.css'
     },
@@ -136,14 +137,17 @@ PIPELINE_CSS = {
 PIPELINE_JS = {
     'scripts': {
         'source_filenames': (
-          'scripts/*.js',
-          'bootstrap/js/bootstrap.js',
           'bower_components/angular/angular.js',
           'django_extensions/js/*.js',
           'moment.min.js',
           'bower_components/angular-xeditable/dist/js/xeditable.js',
           'bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js',
           'main.js',
+          'bower_components/angular-animate/angular-animate.js',
+          'bower_components/angularjs-toaster/toaster.js',
+          'scripts/*.js',
+          'notify/notify.js',
+          'bootstrap/js/bootstrap.js',
         ),
         'output_filename': 'scripts.js',
     }

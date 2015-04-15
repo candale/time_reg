@@ -5,6 +5,16 @@
 {% include "_header.html" %}
 
 <div class="container" ng-app="TimeReg" ng-controller="RegistrationCtrl">
+    <toaster-container toaster-options="{'time-out': 3000, 'close-button':true, 'animation-class': 'toast-top-right'}"></toaster-container>
+      <div class="header-stats vdivide" ng-cloak>
+        <div class="col-sm-2"><small>Hours this month: [[statistics.workingHoursThisMonth]]</small></div>
+        <div class="col-sm-3"><small>Burned hours this month: [[statistics.workedHoursThisMonth]]</small></div>
+        <div class="col-sm-2"><small ng-class="getHoursOffsetClass()">Hours offset: [[statistics.hoursOffset]]</small></div>
+        <div class="col-sm-3"><small>Reamining hours this month: [[statistics.remainingHours]]</small></div>
+        <div class="col-sm-2"><small>Imported from Jira: [[statistics.importedFromJira]]</small></div>
+      </div>
+
+      <hr/>
     <div class="row">
         <form class="form-inline">
           <div class="form-group" ng-class="errors.task_code ? 'has-error' : ''">
@@ -39,9 +49,7 @@
                      ng-model="datePicker.dt" is-open="datePicker.opened"
                      ng-required="true"
                      ng-click="datePicker.open($event)"
-                     show-button-bar="false"
-                     data-toggle="tooltip"
-                     data-original-title='lol, tooltip' />
+                     show-button-bar="false" />
             </div>
           </div>
           <button type="submit" ng-click="register()" 
@@ -93,6 +101,7 @@
                    <span
                         editable-bsdate="reg.registration_day"
                         e-form="rowform"
+                        e-name="registration_day"
                         e-datepicker-popup-x-editable="[[datePicker.format]]"
                         e-is-open="reg.datepicker_open"
                         e-ng-click="openDatepickerForRecord(reg.id)"
@@ -120,7 +129,7 @@
 
                   <div class="buttons" ng-show="!rowform.$visible">
                     <button class="btn btn-primary" ng-click="rowform.$show()">edit</button>
-                    <button class="btn btn-danger" ng-click="delete($data)">del</button>
+                    <button class="btn btn-danger" ng-click="delete($index)">del</button>
                   </div>  
                 </td>
               </tr>

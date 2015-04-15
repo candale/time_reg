@@ -1,13 +1,24 @@
-angular.module('TimeReg.controllers', [])
-  .controller('RegistrationCtrl', function($scope, timeRegService, $timeout) {
+angular.module('TimeReg.controllers', ['toaster'])
+  .controller('RegistrationCtrl', function($scope, timeRegService, toaster) {
+
+    function updateHeaderStatistics() {
+      timeRegService.getHeaderStatistics().success(
+        function(response) {
+          $scope.statistics = response;
+        });
+    }
+        // get the data
+    function updateList() {
+      timeRegService.getRegistrations().success(
+        function(response) {
+          $scope.registrations = response;
+          updateHeaderStatistics();
+        });
+    }
 
     $scope.date = moment().format('MM/DD/YYYY');
-
-    // get the data
-    timeRegService.getRegistrations().success(
-      function(response) {
-        $scope.registrations = response;
-      });
+    $scope.errors = {};
+    updateList();
 
     // FUNCTION DECLARATIONS
 
@@ -18,13 +29,40 @@ angular.module('TimeReg.controllers', [])
       $scope.datePicker.dt = $scope.date;
     }
 
+    function markMandatory() {
+      if(!$scope.datePicker.dt) {
+        $scope.errors.registration_day = true;
+      }
+
+      if(!$scope.taskCode) {
+        $scope.errors.task_code = true;
+      }
+
+      if(!$scope.project) {
+        $scope.errors.project = true;
+      }
+
+      if(!$scope.timeSpent) {
+        $scope.errors.time_str = true;
+      }
+    }
+
+    function clearMandatory() {
+      $scope.errors.registration_day = false;
+      $scope.errors.task_code = false;
+      $scope.errors.project = false;
+      $scope.errors.time_str = false;
+    }
+
 
     $scope.register = function() {
       if(!($scope.datePicker.dt && $scope.taskCode && $scope.project && $scope.timeSpent)) {
+        toaster.warning("Warning!", "All fields are required");
+        markMandatory()
         return;
       }
       var message = {
-        "registration_day": $scope.datePicker.dt,
+        "registration_day": moment($scope.datePicker.dt).format("MM/DD/YYYY"),
         "task_code": $scope.taskCode,
         "project": $scope.project,
         "time_str": $scope.timeSpent,
@@ -32,8 +70,10 @@ angular.module('TimeReg.controllers', [])
       };
 
       timeRegService.newRegistration(message).success(function(response) {
-        $scope.registrations.unshift(response);
+        updateList();
         clearAddFields();
+        clearMandatory();
+        toaster.success('Success', 'Sucessfully logged', 3000);
       }).error(function(err) {
         $scope.errors = err;
         console.log($scope.errors);
@@ -44,12 +84,14 @@ angular.module('TimeReg.controllers', [])
     $scope.updateRegistration = function(data, regId) {
       data.id = regId;
       data.source = "M";
+      console.log(data);
 
       timeRegService.updateRegistration(regId, data).success(function(response) {
         for(var timeReg in $scope.registrations) {
 
           if($scope.registrations[timeReg].id == response.id) {
             $scope.registrations[timeReg] = response;
+            toaster.success('Success', 'Updated successfully');
           }
         }
       }).error(function(response) {
@@ -69,37 +111,28 @@ angular.module('TimeReg.controllers', [])
       }
     }
 
-    $scope.delete = function(data) {
-
+    $scope.delete = function(index) {
+      regId = $scope.registrations[index].id;
+      timeRegService.deleteRegistration(regId).success(function(response) {
+        $scope.registrations.splice(index, 1);
+        updateHeaderStatistics();
+        toaster.success('Success', 'Deleted Sucessfully');
+      }).error(function(err) {
+        toaster.error('Error', 'Failed to delete');
+      })
     }
 
     // date-picker
     $scope.datePicker = {};
     $scope.datePicker.format = 'MM/dd/yyyy';
+    $scope.datePicker.opened = false;
     $scope.datePicker.dt = $scope.date;
-
-
     $scope.datePicker.open = function($event) {
-      $timeout(function() {
-        $scope.datePicker.opened = true;
-        console.log('opened');
-      })
-    };
-
-    $scope.disabled = function(date, mode) {
-      return ( datePicker.mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
-    };
+      $scope.datePicker.opened = true;
+    }
 
     $scope.today = function() {
       $scope.datePicker.dt = new Date();
-    };
-
-    $scope.clear = function () {
-      $scope.datePicker.dt = null;
-    };
-
-    $scope.toggleMin = function() {
-      $scope.datePicker.minDate = $scope.datePicker.minDate ? null : new Date();
     };
 
     $scope.datePicker.dateOptions = {
@@ -118,6 +151,18 @@ angular.module('TimeReg.controllers', [])
           console.log('did it');
           $scope.registrations[reg].datepicker_open = true;
           break;
+        }
+      }
+    }
+
+    $scope.getHoursOffsetClass = function() {
+      if(!angular.isUndefined($scope.statistics)) {
+        if($scope.statistics.hoursOffset < -4) {
+          return 'red-offset';
+        } else if ($scope.statistics.hoursOffset < 4) {
+          return '';
+        } else {
+          return 'green-offset';
         }
       }
     }
