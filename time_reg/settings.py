@@ -122,12 +122,12 @@ STATICFILES_FINDERS = (
 PIPELINE_CSS = {
     'style': {
         'source_filenames': (
-          'bootstrap/css/bootstrap-theme.css',
-          'bootstrap/css/bootstrap.css',
-          'scripts/bower_components/angular/angular-csp.css',
-          'bootstrap-editable.css',
+          'bower_components/bootstrap/dist/css/bootstrap-theme.css',
+          'bower_components/bootstrap/dist/css/bootstrap.css',
+          'bower_components/angular/angular-csp.css',
+          #'bootstrap-editable.css',
           'timereg/css/time_reg.css',
-          'xeditable/css/xeditable.css',
+          'bower_components/angular-xeditable/dist/css/xeditable.css',
           'bower_components/angularjs-toaster/toaster.css',
         ),
         'output_filename': 'style.css'
@@ -146,8 +146,8 @@ PIPELINE_JS = {
           'bower_components/angular-animate/angular-animate.js',
           'bower_components/angularjs-toaster/toaster.js',
           'scripts/*.js',
-          'notify/notify.js',
-          'bootstrap/js/bootstrap.js',
+          'bower_components/notify/dist/notify.js',
+          'bower_components/bootstrap/dist/js/bootstrap.js',
         ),
         'output_filename': 'scripts.js',
     }

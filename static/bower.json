@@ -1,0 +1,32 @@
+{
+  "name": "time_reg",
+  "version": "0.0.0",
+  "homepage": "https://github.com/candale/time_reg",
+  "authors": [
+    "candale <andrei.candale@spyhce.com>"
+  ],
+  "description": "time_reg",
+  "main": "time_reg",
+  "moduleType": [
+    "amd",
+    "es6",
+    "globals",
+    "node",
+    "yui"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular-bootstrap": "~0.12.1",
+    "angular-xeditable": "~0.1.9",
+    "angularjs-toaster": "~0.4.10",
+    "bootstrap-datepicker": "~1.4.0",
+    "notifyjs": "~0.3.2"
+  }
+}
